@@ -7,6 +7,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.apache.commons.codec.binary.Base64;
 import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.Mat;
@@ -15,6 +16,7 @@ import org.bytedeco.opencv.opencv_core.Point;
 import org.bytedeco.opencv.opencv_core.Scalar;
 import org.bytedeco.opencv.opencv_core.Size;
 import org.bytedeco.opencv.opencv_java;
+import org.bytedeco.opencv.opencv_videoio.VideoCapture;
 import org.opencv.core.MatOfByte;
 import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.TensorProto;
@@ -24,7 +26,9 @@ import tensorflow.serving.Predict;
 import tensorflow.serving.PredictionServiceGrpc;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -38,17 +42,21 @@ public class Main {
 
         }
     public static void main(String[] args) throws IOException {
-         String host = "localhost";
+          OpenCVFrameConverter.ToMat converter1 = new OpenCVFrameConverter.ToMat();
+        OpenCVFrameConverter.ToOrgOpenCvCoreMat converter2 = new OpenCVFrameConverter.ToOrgOpenCvCoreMat();
+                Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/notbroken.jpg");
+
+         String host = "192.168.1.51";
         int port = 8500;
         // the model's name.
         String modelName = "coconet";
         // model's version
+
+
         long modelVersion = 1;
-                Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/notbroken.jpg");
 
-        while (true){
-                   final long startTime = System.currentTimeMillis();
 
+            final long startTime = System.currentTimeMillis();
         org.bytedeco.opencv.global.opencv_imgproc.resize(img, img, new Size(1200, 1200));
 //        ImageIO.write(image, "JPEG", out);
         ByteBuffer temp = img.getByteBuffer();
@@ -117,7 +125,29 @@ public class Main {
         channel.shutdown();
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime - startTime));
-        }
 
+
+
+
+
+
+
+    }
+    public static BufferedImage Mat2BufferedImage(org.opencv.core.Mat m){
+    //source: http://answers.opencv.org/question/10344/opencv-java-load-image-to-gui/
+    //Fastest code
+    //The output can be assigned either to a BufferedImage or to an Image
+
+     int type = BufferedImage.TYPE_BYTE_GRAY;
+     if ( m.channels() > 1 ) {
+         type = BufferedImage.TYPE_3BYTE_BGR;
+     }
+     int bufferSize = m.channels()*m.cols()*m.rows();
+     byte [] b = new byte[bufferSize];
+     m.get(0,0,b); // get all the pixels
+     BufferedImage image = new BufferedImage(m.cols(),m.rows(), type);
+     final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+     System.arraycopy(b, 0, targetPixels, 0, b.length);
+     return image;
     }
 }
