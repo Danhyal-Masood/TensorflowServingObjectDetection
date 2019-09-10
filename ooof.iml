@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/tensorflowserving/tensorflow-serve-client/lib/tensorflow-serve-client-1.0-SNAPSHOT.jar!/" />
+          <root url="jar://tensorflow-serve-client-1.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
