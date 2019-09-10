@@ -46,7 +46,7 @@ public class Main {
         OpenCVFrameConverter.ToOrgOpenCvCoreMat converter2 = new OpenCVFrameConverter.ToOrgOpenCvCoreMat();
                 Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/notbroken.jpg");
 
-         String host = "192.168.1.51";
+         String host = "localhost";
         int port = 8500;
         // the model's name.
         String modelName = "coconet";
@@ -63,17 +63,6 @@ public class Main {
         byte[] arr = new byte[temp.remaining()];
         temp.get(arr);
         opencv_imgcodecs.imencode(".jpg", img, arr);
-
-//        String encodedfile = new String(Base64.encodeBase64(arr), StandardCharsets.UTF_8);
-
-
-//        MatOfByte bar=new MatOfByte();
-//        org.opencv.imgcodecs.Imgcodecs.imencode(".jpg",converter2.convert(converter1.convert(img)) , bar);
-
-
-
-        // assume this model takes input of free text, and make some sentiment prediction.
-
 
         // create a channel
         ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().maxInboundMessageSize(402180070).build();
@@ -133,21 +122,5 @@ public class Main {
 
 
     }
-    public static BufferedImage Mat2BufferedImage(org.opencv.core.Mat m){
-    //source: http://answers.opencv.org/question/10344/opencv-java-load-image-to-gui/
-    //Fastest code
-    //The output can be assigned either to a BufferedImage or to an Image
-
-     int type = BufferedImage.TYPE_BYTE_GRAY;
-     if ( m.channels() > 1 ) {
-         type = BufferedImage.TYPE_3BYTE_BGR;
-     }
-     int bufferSize = m.channels()*m.cols()*m.rows();
-     byte [] b = new byte[bufferSize];
-     m.get(0,0,b); // get all the pixels
-     BufferedImage image = new BufferedImage(m.cols(),m.rows(), type);
-     final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-     System.arraycopy(b, 0, targetPixels, 0, b.length);
-     return image;
-    }
+   
 }
