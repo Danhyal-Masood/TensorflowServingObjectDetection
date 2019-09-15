@@ -32,6 +32,7 @@ import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,22 +43,126 @@ public class Main {
 
         }
     public static void main(String[] args) throws IOException {
+        String[] TensorCocoClasses=new String[]{
+            "background",
+            "person",
+            "bicycle",
+            "car",
+            "motorcycle",
+            "airplane",
+            "bus",
+            "train",
+            "truck",
+            "boat",
+            "traffic light",
+            "fire hydrant",
+            "12",
+            "stop sign",
+            "parking meter",
+            "bench",
+            "bird",
+            "cat",
+            "dog",
+            "horse",
+            "sheep",
+            "cow",
+            "elephant",
+            "bear",
+            "zebra",
+            "giraffe",
+            "26",
+            "backpack",
+            "umbrella",
+            "29",
+            "30",
+            "handbag",
+            "tie",
+            "suitcase",
+            "frisbee",
+            "skis",
+            "snowboard",
+            "sports ball",
+            "kite",
+            "baseball glove",
+            "skateboard",
+            "surfboard",
+            "tennis racket",
+            "bottle",
+            "45",
+            "wine glass",
+            "cup",
+            "fork",
+            "knife",
+            "spoon",
+            "bowl",
+            "banana",
+            "apple",
+            "sandwich",
+            "orange",
+            "broccoli",
+            "carrot",
+            "hot dog",
+            "pizza",
+            "donut",
+            "cake",
+            "chair",
+            "couch",
+            "potted plant",
+            "bed",
+            "66",
+            "dining table",
+            "68",
+            "69",
+            "toilet",
+            "71",
+            "tv",
+            "laptop",
+            "mouse",
+            "remote",
+            "keyboard",
+            "cell phone",
+            "microwave",
+            "oven",
+            "toaster",
+            "sink",
+            "refrigerator",
+            "83",
+            "book",
+            "clock",
+            "vase",
+            "scissors",
+            "teddy bear",
+            "hair drier",
+            "toothbrush"};
           OpenCVFrameConverter.ToMat converter1 = new OpenCVFrameConverter.ToMat();
         OpenCVFrameConverter.ToOrgOpenCvCoreMat converter2 = new OpenCVFrameConverter.ToOrgOpenCvCoreMat();
-                Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/notbroken.jpg");
+                Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/1_EYFejGUjvjPcc4PZTwoufw.jpeg");
 
          String host = "localhost";
         int port = 8500;
         // the model's name.
-        String modelName = "coconet";
-        // model's version
+        String modelName = "resnet_openimages";
+        String line = "";
+        List<String> OpenImageLabels=new ArrayList<>();
 
+        // model's version
+        String csvpath="class-descriptions-boxable.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(csvpath))) {
+            while ((line = br.readLine()) != null) {
+                String[] elements = line.split(",");
+                OpenImageLabels.add(elements[1]);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         long modelVersion = 1;
+        String openimages="";
 
 
             final long startTime = System.currentTimeMillis();
-        org.bytedeco.opencv.global.opencv_imgproc.resize(img, img, new Size(1200, 1200));
+//        org.bytedeco.opencv.global.opencv_imgproc.resize(img, img, new Size(1920, 1080));
 //        ImageIO.write(image, "JPEG", out);
         ByteBuffer temp = img.getByteBuffer();
         byte[] arr = new byte[temp.remaining()];
@@ -98,6 +203,8 @@ public class Main {
         List<Float> detection_boxes_big = outputmap.get("detection_boxes").getFloatValList();
         List<List<Float>> detection_boxes = Lists.partition(detection_boxes_big, 4);
         List<Float> detection_scores=outputmap.get("detection_scores").getFloatValList();
+//        System.out.println(detection_classes);
+//        System.out.println(num_detections);
         for (int j=0;j<num_detections;j+=1){
             double confidance=detection_scores.get(j);
 
@@ -107,11 +214,13 @@ public class Main {
                 int bottom=(int)(detection_boxes.get(j).get(2)*img.rows());
                 int right=(int)(detection_boxes.get(j).get(3)*img.cols());
                 org.bytedeco.opencv.global.opencv_imgproc.rectangle(img,new Point(left,top),new Point(right,bottom), Scalar.GREEN);
+                org.bytedeco.opencv.global.opencv_imgproc.putText(img, OpenImageLabels.get(detection_classes.get(j).intValue()-1),new Point(left,top),1,1,Scalar.RED);
 
 
             }
         }
         channel.shutdown();
+        org.bytedeco.opencv.global.opencv_imgcodecs.imwrite("/home/danhyal/processed.jpg",img);
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime - startTime));
 
