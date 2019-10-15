@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="net.dongliu:requests:5.0.7" type="repository">
+    <properties maven-id="net.dongliu:requests:5.0.7" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/dongliu/requests/5.0.7/requests-5.0.7.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/net/dongliu/commons/6.10.8/commons-6.10.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

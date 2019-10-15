@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://tensorflow-serve-client-1.0-SNAPSHOT.jar!/" />
+          <root url="jar://$USER_HOME$/tensorflow-serve-client-1.0-SNAPSHOT.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -23,5 +23,8 @@
     <orderEntry type="library" name="io.grpc:grpc-stub:1.23.0" level="project" />
     <orderEntry type="library" name="commons-codec:commons-codec:1.13" level="project" />
     <orderEntry type="library" name="com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="com.googlecode.json-simple:json-simple:1.1.1" level="project" />
+    <orderEntry type="library" name="one.util:streamex:0.7.0" level="project" />
+    <orderEntry type="library" name="net.dongliu:requests:5.0.7" level="project" />
   </component>
 </module>

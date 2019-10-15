@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="one.util:streamex:0.7.0" type="repository">
+    <properties maven-id="one.util:streamex:0.7.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/one/util/streamex/0.7.0/streamex-0.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
