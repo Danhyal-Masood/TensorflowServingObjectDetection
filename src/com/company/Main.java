@@ -136,17 +136,18 @@ public class Main {
             "toothbrush"};
           OpenCVFrameConverter.ToMat converter1 = new OpenCVFrameConverter.ToMat();
         OpenCVFrameConverter.ToOrgOpenCvCoreMat converter2 = new OpenCVFrameConverter.ToOrgOpenCvCoreMat();
-                Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/1_EYFejGUjvjPcc4PZTwoufw.jpeg");
+        Mat img = org.bytedeco.opencv.global.opencv_imgcodecs.imread("/home/danhyal/notbroken.jpg");
+        org.bytedeco.opencv.global.opencv_imgproc.resize(img,img,new Size(1920,1080));
 
          String host = "localhost";
         int port = 8500;
         // the model's name.
-        String modelName = "resnet_openimages";
+        String modelName = "resnet_openimagesv2";
         String line = "";
         List<String> OpenImageLabels=new ArrayList<>();
 
         // model's version
-        String csvpath="class-descriptions-boxable.csv";
+        String csvpath="src/com/company/class-descriptions-boxable.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(csvpath))) {
             while ((line = br.readLine()) != null) {
                 String[] elements = line.split(",");
@@ -214,6 +215,7 @@ public class Main {
                 int bottom=(int)(detection_boxes.get(j).get(2)*img.rows());
                 int right=(int)(detection_boxes.get(j).get(3)*img.cols());
                 org.bytedeco.opencv.global.opencv_imgproc.rectangle(img,new Point(left,top),new Point(right,bottom), Scalar.GREEN);
+//                org.bytedeco.opencv.global.opencv_imgproc.putText(img,TensorCocoClasses[detection_classes.get(j).intValue()],new Point(left,top),1,1,Scalar.RED);
                 org.bytedeco.opencv.global.opencv_imgproc.putText(img, OpenImageLabels.get(detection_classes.get(j).intValue()-1),new Point(left,top),1,1,Scalar.RED);
 
 
